@@ -2,6 +2,7 @@ const express =require("express")
 const cors= require("cors")
 const app=express() 
 const mongoose =require("mongoose")
+require("dotenv").config();
 const note=require("./models/note")
 const user = require("./models/user");
 const auth = require("./middleware/auth");
@@ -13,7 +14,7 @@ const jwt = require("jsonwebtoken");  //login token
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb+srv://vinotes:vinotesvinotes@cluster0vinotes.wqmlohh.mongodb.net/?appName=Cluster0VINotes")
+mongoose.connect(process.env.MONGO_URL)
     .then(()=>console.log("MongoDB Connected"))
     .catch((err)=>console.log(err))
 
@@ -102,7 +103,7 @@ app.post('/api/login',async (req,res)=>{
         //create token
         const token =jwt.sign(
             {userId:ifuser._id},
-            "secretkey",
+            process.env.JWT_SECRET,
             {expiresIn:"1d"}
         )
 
